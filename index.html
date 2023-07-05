@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HTML Canvas Game</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <style>
+            canvas{
+                cursor: pointer;
+                /* width: 100%; */
+            }
+        </style>
+    </head>
+    <body>
+        <canvas class="myCanvas d-block mx-auto" style="border: 1px dashed red; "></canvas>
+
+        <script>
+            var canvas = document.querySelector('.myCanvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width='1112';
+            canvas.height='623';
+
+            // // Loading Area
+            // let prg = 0;
+            // var tpg = 100;
+
+            // // Function 
+            // function loadButton(){
+            //     // Function body
+            //     ctx.clearRect(0,0,canvas.width,canvas.height);
+            //     ctx.font = "50px Comic Sans MS";
+            //     ctx.fillText("Kids Game",400,500);
+
+            //     //
+            //     ctx.fillStyle = '#c0c0c0';
+            //     ctx.fillRect(0,canvas.height -20, canvas.width,20);
+
+            //     let pgwd = (prg/tpg)* canvas.width;
+
+            //     ctx.fillStyle = "#42b983";
+            //     ctx.fillRect(0, canvas.height - 20, loadButton, 20);
+
+            //     // Check if the progress is complete
+            //     if (prg >= tpg) {
+            //         // Clear the canvas
+            //         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //         // Draw the main screen content
+            //         ctx.fillStyle = "#f0f0f0";
+            //         ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            //         // Draw the text on the main screen
+            //         //  ctx.fillStyle = "#000000";
+            //         //   ctx.font = "30px Arial";
+            //         image.src = "./img/bg4.png";
+            //         //   ctx.fillText("Main Screen", canvas.width / 2 - 80, canvas.height / 2);
+            //     }
+
+            // }
+
+            // Var ObjectName = New ClassName();
+            var image = new Image();
+            // Source of the image
+            image.src = "./img/bg4.png";
+            
+            // Onload Event
+            image.onload = function(){
+                // Function Body
+                ctx.drawImage(image,0,0,1112,623);
+            }
+            
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    </body>
+</html>

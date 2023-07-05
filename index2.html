@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <style>
+            .myCanvas{
+                border: 1px dashed red;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <canvas class="myCanvas"></canvas>
+
+        <script>
+            var canvas = document.querySelector('.myCanvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth-30;
+            canvas.height = window.innerHeight-8;
+
+            // Initial step
+            var pg = 0;
+            var totalPg = 100;
+
+           
+            // pic();
+            let updatePgBar=()=>{
+                // 1st step clear the canvas
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                 // Kids Image 
+                let pic=()=>{
+                    let image = new Image();
+                    image.src = "./img/kid3.png";
+                    image.onload = function(){
+                        ctx.drawImage(image,400,150);
+                    };
+                };
+                // Function Invoking
+                pic();
+                // Loading Screen text area
+                ctx.font = "70px Comic Sans MS";
+                ctx.fillText("KIDS", 600, 300);
+                ctx.fillText("TYPE", 600, 360);
+
+                // Calculate the progress bar width
+                const pgWidth = (pg / totalPg) * canvas.width;
+
+                // Draw the progress bar
+                ctx.fillStyle = "red";
+                ctx.fillRect(0, canvas.height - 20, pgWidth, 20);
+
+                // Check if the progress is complete
+                if (pg >= totalPg) {
+                    // Clear the canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                    // Loading screen Image
+                    let image = new Image();
+                    image.src = "./img/bg4.png";
+                    image.onload = function(){
+                        ctx.drawImage(image,0,0,canvas.width,canvas.height);
+                        
+                    }
+                }
+            }
+
+            // Start the game and update the progress bar
+            function startGame() {
+                // Simulate the progress increment
+                const increment = 4;
+                const interval = setInterval(() => {
+                    // Increase the progress
+                    pg += increment;
+
+                    // Update the progress bar and main screen
+                    updatePgBar();
+                    
+                    
+                    // Check if the progress is complete
+                    if (pg >= totalPg) {
+                        // Game is complete, stop the interval
+                        clearInterval(interval);
+                    }
+                }, 150); // Adjust the interval duration as needed
+                
+            }
+
+            // Call the startGame function to begin the game
+            startGame();
+
+            
+
+            // 2nd Screen image import
+           
+        
+        </script>
+    </body>
+</html>
