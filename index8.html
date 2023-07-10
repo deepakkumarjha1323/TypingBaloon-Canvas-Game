@@ -62,16 +62,16 @@
             //ctx.clearRect(0, 0, canvas.width, canvas.height); 
             let pic = () => {
                 let imagek = new Image();
-                imagek.src = "./img/loader_img.png";
+                imagek.src = "./img/loader1.png";
                 imagek.onload = function () {
                     ctx.drawImage(imagek, 0, 0, canvas.width, canvas.height);
                 };
             };
-            // Function Invoking
+            // Function Calling
             pic();
 
             // Calculate the progress bar width
-            const pgWidth = (pg / totalPg / 3) * canvas.width;
+            const pgWidth = (pg / totalPg / 2.1) * canvas.width;
 
             // Draw the progress bar
             ctx.fillStyle = "blue";
