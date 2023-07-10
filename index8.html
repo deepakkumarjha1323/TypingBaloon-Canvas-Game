@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmol Laptop Game 01</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            cursor: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAoCAYAAADt5povAAAAAXNSR0IArs4c6QAABHhJREFUWEdjZMAPWNhYWNpdzXVTQcp2n7w869efP1UMDAx/COjDKc1IQGPlht6yNn97E7CyjQdPMwQUd4MsbKeJhYbqCmfPLe0yQjbcILLs7MXbDyAuIAPg9aGNvtb1w3MbNJDNtU2pv37kwnUtMuwCaxm1cFAFKTcDAwMTAwPDZ1Lik+Q4tEmuuXPx5sP9AU5miazMTEzrD5xe9+Hzt0QGBoYvDAwMfAwMDGwMDAxvcDmCZAtNYisYWrMiGNwtDcBmnrtxn8EquWYGMyPT/1AX81QeTk7mdQdO7nn++kMUNotJtjC4rJdhbVcxigeskmoYSmP9GAIdzcDidx6/YDCJrVz+8ctXkKUogGQLY2snMyxuzkUxJLS8j2FVRxEDI5Jp/kXd7zcdOl1gpKlYIcjDw3/owo21v3//LqeKhdgcEVza819DUZqhJSsS7I6jF28yuGW3zKSZhWEV/QwLG7IZODlAaQgCAkp6viBbKMrAwMDOwMDwjIGB4R9IAbaiDZtvSBEDWSghIyq4PMDJ3IGTnY3h4q0Hb/edujLrz79/LTb6WmfRy1JSDEePa5BeRhFBvg1nFnX4y0uKwL0OCu/I2kkn5EQEJY/Ma5FHTiEUWxjqbPFjVWcRKChRwKkrdxhyu+cxnFzYhiJOsYU2huqPDs9ulsVWMsTUTmZYgpYFkpunM8ytzURRTqwYOEgZGBhSalKCZ1cmBDBwcaB6FJtv/v79x8DMDCpCEYBYMZiFIJ1usuLCjUua8yzsjDThJmGzEFtIECuGbCFID6u0mND+66v7rXm5OcFmYAtSYg3Hpg7dQpCa8PU9pSsCHEwZ/vz9y5DUOJ1hUVMOJXZgJDj0ksZ5fn3WngRfB4YDZ68yXLnzmCEn3IOmFjrMqc3Yn+zvxJDTOZehLjWEQUyIn6YW6nXmRl8si/dniKqZxLCsJY9qloEMwhaH3PG+jh8W1GeynLh8i8FCV42qFkZUT/yNUVtoykmevLp2ohly3UYtW12ymh5iq57Kjs5r6bTSo67vfv76zSDlnroOm4UiIc6WD1Z3FoJaZVQD0H5JItYKmImBoX7n1NpqZ3Pdv1ht/P+fUCcIpg2uziWr+cO+01cUcWlkV5AWO3p0bqu0pAgfpqX/iYlhhKMWbTnEldA4tZKBgWE6PpfKG6gr7N0xueqnmKAAjv4gAZ8yMjJ++PSFSSu46NWL9x+cQS0JQkGjoiIruWZtV+EPXRWFbzgjlBF3p6hmyjK5tgUbQA3lQyD9hCwEqRGSlxTdeXFZ52M+Xm7scQo2CXsw64UWK1659xjUn/xPrIUgde4lMX41nQWxVxgYCYTKP0Qwf/r6nUXEOZnx799/SRipiED6ZzHTVT11fEHzNrC6f8z4QwbqqKPnrwvapTa8YGBgaCTVQgYtRdkjV1f1rEVxGI5ghKnZdOCMhH9J13vkMQFi4hCsX1VWYv+tdZPnY4QEniBetuuYdHTVRFDcwQchiLZQXIh/2Ys9c/sY/vwhWk/P8m0ypf2LFBkYGPpgDgUAS8flzmrpvVgAAAAASUVORK5CYII=), default;
+        }
+
+        #myCanvas {
+            /* border: 1px dashed red; */
+            /* cursor: url(./img/cursor.png); */
+        }
+
+        canvas {
+            border: 1px solid black;
+            display: block;
+        }
+
+        #popImage {
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="backgroundSound" loop>
+        <source src="./sound/3.mp3" type="audio/mpeg">
+    </audio>
+    <canvas id="myCanvas"></canvas>
+    <canvas id="gameCanvas" style="display: none;"></canvas>
+    <img id="popImage" src="./img/crackers3.gif" alt="Pop Image" style="width: 200px; height: 200px;">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        let gameCanvas = document.querySelector('#gameCanvas');
+        let gameCtx = gameCanvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gameCanvas.width = window.innerWidth;
+        gameCanvas.height = window.innerHeight;
+
+        var popImage = document.getElementById('popImage');
+
+        // Initial step
+        var pg = 0;
+        var totalPg = 100;
+
+        let updatePgBar = () => {
+            // 1st step clear the canvas
+
+            //ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            let pic = () => {
+                let imagek = new Image();
+                imagek.src = "./img/loader_img.png";
+                imagek.onload = function () {
+                    ctx.drawImage(imagek, 0, 0, canvas.width, canvas.height);
+                };
+            };
+            // Function Invoking
+            pic();
+
+            // Calculate the progress bar width
+            const pgWidth = (pg / totalPg / 3) * canvas.width;
+
+            // Draw the progress bar
+            ctx.fillStyle = "blue";
+            ctx.fillRect(canvas.width/3.30,canvas.height/1.76, pgWidth, 22);
+
+            // Check if the progress is complete
+            if (pg >= totalPg) {
+                // Clear the canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Loading screen Image
+                const backgroundImage = new Image();
+                backgroundImage.src = './img/bg5.jpg';
+                backgroundImage.onload = function () {
+                    // Draw the background image on the canvas
+                    ctx.drawImage(backgroundImage, 0, 0,canvas.width,canvas.height);
+                };
+
+                var image = new Image();
+                image.src = './img/Cloud2.png';
+                var x = 0;
+                var y = 0;
+
+
+                function animate() {
+                    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(image, x, y, 400, 170);
+                    ctx.drawImage(image, x + 340, y - 10, 350, 140);
+                    ctx.drawImage(image, x + 700, y + 5, 400, 170);
+                    ctx.drawImage(image, x + 1010, y, 170, 100);
+                    ctx.drawImage(image, x + 1160, y + 5, 300, 170);
+                    ctx.drawImage(image, x + 1380, y - 15, 250, 120);
+                    ctx.drawImage(image, x + 1600, y + 16, 250, 120);
+                    ctx.drawImage(image, x + 1850, y - 10, 350, 140);
+
+                    x += 1;
+                    if (x > canvas.width) {
+                        x = -image.width;
+                    };
+                    drawButton();
+                    requestAnimationFrame(animate);
+
+                };
+                animate();
+                var backgroundSound = document.getElementById('backgroundSound')
+                backgroundSound.play();
+            };
+        };
+
+        // Start the game and update the progress bar
+        function startGame() {
+            // Simulate the progress increment
+            const increment = 4;
+            const interval = setInterval(() => {
+                // Increase the progress
+                pg += increment;
+
+                // Update the progress bar and main screen
+                updatePgBar();
+                // Check if the progress is complete
+                if (pg >= totalPg) {
+                    // Game is complete, stop the interval
+                    clearInterval(interval);
+                }
+            }, 250); // Duration
+
+        }
+        startGame();
+
+        var image = new Image();
+        image.src = "./img/bg5.jpg";
+        image.onload = function () {
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        };
+
+        var buttonX = canvas.width/2.50; // X position of the button
+        var buttonY = canvas.height/1.5; // Y position of the button
+        var buttonWidth = 440; // Width of the button
+        var buttonHeight = 130; // Height of the button
+
+        image.onload = function () {
+            ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+            // drawButton();
+        };
+
+        function drawButton() {
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-T.png";
+            ctx.drawImage(imageA1, canvas.width-canvas.width/1.43,canvas.height-canvas.height/1.13, 120, 200);
+            // Y
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-Y.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/1.62,canvas.height-canvas.height/1.13, 120, 200);
+            // P
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-P.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/1.86,canvas.height-canvas.height/1.13, 120, 200);
+            // I
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-I.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/2.17,canvas.height-canvas.height/1.13, 120, 200);
+            // N
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-N.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/2.59,canvas.height-canvas.height/1.13, 120, 200);
+            // G
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-G.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/3.23,canvas.height-canvas.height/1.13, 120, 200);
+            // B
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-B.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/1.35,canvas.height-canvas.height/1.43, 120, 200);
+            // A
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-A.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/1.52,canvas.height-canvas.height/1.43, 120, 200);
+            // L
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-L.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/1.73,canvas.height-canvas.height/1.43, 120, 200);
+            // L
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-L2.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/2.01,canvas.height-canvas.height/1.43, 120, 200);
+            // O
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-O.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/2.37,canvas.height-canvas.height/1.43, 120, 200);
+            // O
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-O2.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/2.87,canvas.height-canvas.height/1.43, 120, 200);
+            // N
+            var imageA1 = new Image();
+            imageA1.src = "./img/B-N.png";
+            ctx.drawImage(imageA1,canvas.width-canvas.width/3.7,canvas.height-canvas.height/1.43, 120, 200);
+
+
+            ctx.fillStyle = "rgba(240, 240, 240, 0.0)"; // Button background color
+            ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+
+            ctx.font = "80px Adobe Garamond";
+            ctx.strokeStyle = "#36ADE8";
+            ctx.lineWidth = 10;
+            ctx.strokeText("Start Game", buttonX + 10, buttonY + buttonHeight / 2 + 6);
+            ctx.fillStyle = "white";
+            ctx.fillText("Start Game", buttonX + 10, buttonY + buttonHeight / 2 + 6);
+        }
+
+        canvas.addEventListener("click", function (event) {
+            var rect = canvas.getBoundingClientRect();
+            var mouseX = event.clientX - rect.left;
+            var mouseY = event.clientY - rect.top;
+            if (
+                mouseX > buttonX &&
+                mouseX < buttonX + buttonWidth &&
+                mouseY > buttonY &&
+                mouseY < buttonY + buttonHeight
+            ) {
+                
+                // Load the background image
+                const backgroundImage = new Image();
+                backgroundImage.src = './img/bg5.jpg';
+                backgroundImage.onload = function () {
+                    // Start the game loop after the image has loaded
+                    // gameLoop();
+                };
+                //New
+
+
+                // Balloon variables
+                let balloons = [];
+                let balloonImages = ['./img/heart1.png', './img/heart2.png', './img/heart3.png', './img/heart4.png', './img/heart5.png', './img/heart6.png', './img/heart7.png'];
+
+                // Game Score variables
+                let score = 0;
+                let balloonsPassed = 0;
+
+                // Add event listener for key presses
+                document.addEventListener('keydown', keyDownHandler, false);
+
+                // Create a balloon object
+                function createBalloon() {
+                    let balloon = {
+                        x: Math.random() * (gameCanvas.width - 50),
+                        y: gameCanvas.height,
+                        image: getRandomBalloonImage(),
+                        text: getRandomLetter()
+                    };
+                    balloons.push(balloon);
+                }
+
+                // Generate a random letter
+                function getRandomLetter() {
+                    let letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    return letters[Math.floor(Math.random() * letters.length)];
+                }
+
+                // Get a random balloon image URL
+                function getRandomBalloonImage() {
+                    return balloonImages[Math.floor(Math.random() * balloonImages.length)];
+                }
+
+                // Check if the typed letter matches the balloon letter
+                function checkLetter(letter) {
+                    for (let i = 0; i < balloons.length; i++) {
+                        if (balloons[i].text === letter) {
+                            // Show the pop image at the balloon's position
+                            showPopImage(balloons[i].x, balloons[i].y);
+                            balloons.splice(i, 1);
+                            score++;
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                // Show the pop image at the given position
+                function showPopImage(x, y) {
+                    // Position the pop image at the balloon's location
+                    popImage.style.position = 'absolute';
+                    popImage.style.transform = `translate(${x}px, ${y}px)`;
+
+                    // Make the pop image visible
+                    popImage.style.visibility = 'visible';
+
+                    // Hide the pop image after 500 milliseconds
+                    setTimeout(function () {
+                        popImage.style.visibility = 'hidden';
+                    }, 500);
+                }
+
+                // Handle key down events
+                function keyDownHandler(event) {
+                    let letter = String.fromCharCode(event.keyCode);
+                    if (checkLetter(letter)) {
+                        console.log('Pop!');
+                    }
+                }
+                //new
+
+                function gameLoop() {
+                    canvas.style.display = 'none';
+                    gameCanvas.style.display = 'block';
+                    // Render the background image
+                    gameCtx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+                    //new
+                    // Move and draw balloons
+                    for (let i = 0; i < balloons.length; i++) {
+                        let balloon = balloons[i];
+                        balloon.y -= 0.5;
+
+                        // Draw the balloon image
+                        var balloonImage = new Image();
+                        balloonImage.src = balloon.image;
+                        gameCtx.drawImage(balloonImage, balloon.x - 30, balloon.y - 55, 140, 135);
+
+                        //new
+                        // Draw the letter inside the balloon
+                        gameCtx.font = '36px Adobe Garamond';
+                        gameCtx.fillStyle = 'White';
+                        gameCtx.textAlign = 'center';
+                        gameCtx.fillText(balloon.text, balloon.x+40, balloon.y+18 - 15);
+
+                        // Check if ten balloons have passed
+                        if (balloonsPassed >= 10) {
+                            // Stop the game or perform any other actions
+                            console.log('Game Over');
+                            Swal.fire(
+                                'Game Over',
+                                'Your Score ' + score + '<br>Anil sir',
+                                'success'
+                            );
+                            return; // Exit the update function
+                        }
+
+                        // Check if balloon has reached the top of the screen
+                        if (balloon.y < 0) {
+                            balloons.splice(i, 1);
+                            console.log('Missed!');
+                            balloonsPassed++;
+                        }
+
+
+                    }
+                    // Display the score
+                    gameCtx.font = '30px Adobe Garamond';
+                    gameCtx.fillStyle = 'black';
+                    gameCtx.textAlign = 'left';
+                    gameCtx.fillText('Score: ' + score, 20, 40);
+
+                    // Create new balloons every second
+                    if (Math.random() < 0.01) {
+                        createBalloon();
+                    }
+                    requestAnimationFrame(gameLoop);
+
+                }
+                gameLoop();
+
+            }
+        }
+        );        
+    </script>
+</body>
+
+</html>
